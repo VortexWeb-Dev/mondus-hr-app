@@ -14,7 +14,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $links = [
                 'salary_cert.php' => ['Salary Certificate', 'fas fa-money-check-alt'],
                 'noc_cert.php' => ['NOC Certificate', 'fas fa-file-alt'],
-                'leave_balance.php' => ['Leave Balance', 'fas fa-calendar-check'],
+                // 'leave_balance.php' => ['Leave Balance', 'fas fa-calendar-check'],
             ];
 
             foreach ($links as $link => $data) {
@@ -34,7 +34,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             }
             ?>
             <li>
-                <a href="https://b24-oy9apg.bitrix24.com/bizproc/processes/25/view/0/" target="_blank" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                <a href="https://mondus.group/bizproc/processes/12/view/0/" target="_blank" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
                     <i class="fas fa-calendar-check mr-2"></i> Leave Application
                 </a>
             </li>
