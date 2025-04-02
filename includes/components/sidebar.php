@@ -6,7 +6,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <div class="p-6">
         <h1 class="font-bold mb-8 text-white text-center hover:text-gray-300">
             <a href="index.php" class="flex flex-col">
-                <span class="text-xl">BWCMONDUS- HR</span>
+                <span class="text-xl">MONDUS- HR</span>
             </a>
         </h1>
         <ul class="flex flex-col gap-2">

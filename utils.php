@@ -33,7 +33,7 @@ function generateWordDocument($templatePath, $user, $startDate, $endDate, $salar
     $templateData = [
         'FULL_NAME' => trim($user['NAME'] . ' ' . $user['LAST_NAME'] ?? ""),
         'NATIONALITY' => $user['PERSONAL_COUNTRY'] ?? "",
-        'PASSPORT_NUMBER' => $user['UF_USR_1737788340786'] ?? "",
+        'PASSPORT_NUMBER' => $user['UF_USR_1743588068970'] ?? "",
         'DATE_OF_JOINING' => (new DateTime($user['UF_EMPLOYMENT_DATE']))->format('F Y'),
         'POSITION' => $user['WORK_POSITION'] ?? "",
         'SALARY' => number_format((int)$salary) ?? "",
@@ -43,8 +43,8 @@ function generateWordDocument($templatePath, $user, $startDate, $endDate, $salar
         'CURRENT_DATE' => getTodayDateFormatted(),
         'NOC_SENTENCE' => generateNocSentence($noc_reason, $country, formatDateRange($startDate, $endDate)),
         'NOC_REASON' => generateNocReasonText($noc_reason, $country),
-        'REF_NO'=>generateReferenceNumber(),
-        'SALARY_TEXT'=> convertSalaryToText((int)$salary)
+        'REF_NO' => generateReferenceNumber(),
+        'SALARY_TEXT' => convertSalaryToText((int)$salary)
     ];
 
     foreach ($templateData as $placeholder => $value) {
@@ -131,21 +131,23 @@ function generateNocReasonText($noc_reason, $country)
     return $nocReasonText;
 }
 
-function convertSalaryToText($amount) {
+function convertSalaryToText($amount)
+{
     if (!is_numeric($amount)) {
         return "Invalid amount";
     }
 
     $formatter = new NumberFormatter("en", NumberFormatter::SPELLOUT);
     $amountInWords = ucfirst($formatter->format($amount));
-    
+
     return "$amountInWords Dirhams only";
 }
 
-function generateReferenceNumber() {
-    $prefix = "MONDUS-HR-DOC01-BS-SC"; 
-    $year = date("Y"); 
-    $randomNumber = str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT); 
+function generateReferenceNumber()
+{
+    $prefix = "MONDUS-HR-DOC01-BS-SC";
+    $year = date("Y");
+    $randomNumber = str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
 
     return "{$prefix}-{$year}-{$randomNumber}";
 }
