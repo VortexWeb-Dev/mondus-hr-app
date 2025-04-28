@@ -1,4 +1,4 @@
 <?php
-header("Location: salary_cert.php");
+header("Location: dashboard.php");
 exit();
 ?>
