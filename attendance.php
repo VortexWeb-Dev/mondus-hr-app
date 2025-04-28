@@ -70,15 +70,7 @@ if (isset($_POST['employee_id']) && $_POST['employee_id'] != '') {
     ?>
     <!-- Employee Basic Info Card -->
     <div class="bg-blue-50 p-6 rounded-lg shadow-md space-y-2 text-gray-700">
-        <h2 class="text-2xl font-semibold mb-4 text-blue-700">Employee Details</h2>
         <div><strong>Name:</strong> <?= $selectedEmployee['NAME'] . ' ' . $selectedEmployee['LAST_NAME'] ?></div>
-        <div><strong>Employee ID:</strong> <?= $selectedEmployee['ID'] ?></div>
-        <?php if (!empty($selectedEmployee['WORK_POSITION'])): ?>
-        <div><strong>Position:</strong> <?= $selectedEmployee['WORK_POSITION'] ?></div>
-        <?php endif; ?>
-        <?php if (!empty($selectedEmployee['UF_DEPARTMENT'])): ?>
-        <div><strong>Department:</strong> <?= implode(', ', $selectedEmployee['UF_DEPARTMENT']) ?></div>
-        <?php endif; ?>
     </div>
     <?php endif; ?>
 

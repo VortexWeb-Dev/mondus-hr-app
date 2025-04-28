@@ -1,23 +1,23 @@
 <?php
 include('includes/header.php');
 include('includes/components/sidebar.php');
-// require_once __DIR__ . '/crest/crest.php';
+require_once __DIR__ . '/crest/crest.php';
 
-// // Fetch employee list from Bitrix API
-// $employeeResponse = CRest::call('user.get', ['filter' => ['ACTIVE' => true]]);
-// $employees = $employeeResponse['result'] ?? [];
+// Fetch employee list from Bitrix API
+$employeeResponse = CRest::call('user.get', ['filter' => ['ACTIVE' => true]]);
+$employees = $employeeResponse['result'] ?? [];
 
-// $selectedEmployeeId = $_GET['employee_id'] ?? '';
-// $selectedEmployee = null;
+$selectedEmployeeId = $_GET['employee_id'] ?? '';
+$selectedEmployee = null;
 
-// if ($selectedEmployeeId !== '') {
-//     foreach ($employees as $emp) {
-//         if ($emp['ID'] == $selectedEmployeeId) {
-//             $selectedEmployee = $emp;
-//             break;
-//         }
-//     }
-// }
+if ($selectedEmployeeId !== '') {
+    foreach ($employees as $emp) {
+        if ($emp['ID'] == $selectedEmployeeId) {
+            $selectedEmployee = $emp;
+            break;
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -60,6 +60,43 @@ include('includes/components/sidebar.php');
         </div>
     </div>
 
+        <!-- Employee Details Section -->
+    <div class="mt-12 bg-white p-6 rounded-lg shadow space-y-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">View Employee Details</h2>
+
+        <form method="GET" class="flex flex-col md:flex-row items-center gap-4">
+            <label for="employee_id" class="text-lg font-medium text-gray-700">Select Employee:</label>
+            <select name="employee_id" id="employee_id" class="p-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500">
+                <option value="">-- Choose Employee --</option>
+                <?php foreach ($employees as $emp): ?>
+                    <option value="<?= $emp['ID'] ?>" <?= ($selectedEmployeeId == $emp['ID']) ? 'selected' : '' ?>>
+                        <?= $emp['NAME'] . ' ' . $emp['LAST_NAME'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
+                Show
+            </button>
+        </form>
+
+        <?php if ($selectedEmployee): ?>
+            <div class="mt-6 border-t pt-4 space-y-2 text-gray-700">
+                <p><strong>Employee ID:</strong> <?= $selectedEmployee['ID'] ?></p>
+                <p><strong>Name:</strong> <?= $selectedEmployee['NAME'] . ' ' . $selectedEmployee['LAST_NAME'] ?></p>
+                <p><strong>Department:</strong>
+                    <?php
+                    if (!empty($selectedEmployee['UF_DEPARTMENT'])) {
+                        echo implode(', ', $selectedEmployee['UF_DEPARTMENT']);
+                    } else {
+                        echo 'N/A';
+                    }
+                    ?>
+                </p>
+            </div>
+        <?php elseif ($selectedEmployeeId !== ''): ?>
+            <p class="text-red-500 mt-4 font-semibold">Employee not found.</p>
+        <?php endif; ?>
+    </div>
 </div>
 
 </body>
