@@ -24,30 +24,6 @@ $templatePath = __DIR__ . "/templates/" .
         echo "User information could not be retrieved.";
         exit;
     }
-
-    function generateNoticePeriodDocument($templatePath, $user, $resignationDate, $noticePeriodStartDate, $lastWorkingDay, $addressTo, $country = 'UAE') {
-        if (!file_exists($templatePath)) {
-            echo "Template file does not exist.";
-            return false;
-        }
-
-        $template = file_get_contents($templatePath);
-
-        $template = str_replace('${FULL_NAME}', $user['NAME'] . ' ' . $user['LAST_NAME'], $template);
-        $template = str_replace('${RESIGNATION_DATE}', $resignationDate, $template);
-        $template = str_replace('${NOTICE_PERIOD_START_DATE}', $noticePeriodStartDate, $template);
-        $template = str_replace('${LAST_WORKING_DAY}', $lastWorkingDay, $template);
-        $template = str_replace('${ADDRESS_TO}', $addressTo, $template);
-        $template = str_replace('${CURRENT_DATE}', date('Y-m-d'), $template); 
-
-        $template = str_replace('${COUNTRY}', $country, $template);
-
-        $outputPath = __DIR__ . '/generated_documents/' . 'NoticePeriod_' . time() . '.docx';
-
-        file_put_contents($outputPath, $template);
-    
-        return $outputPath;
-    }
     
     $fullName = trim(ucwords(strtolower(trim($user['NAME']))) . ' ' .
         ucwords(strtolower(trim($user['SECOND_NAME'] ?? ''))) . ' ' .
@@ -57,14 +33,22 @@ $templatePath = __DIR__ . "/templates/" .
     $sanitizedFileName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $fullName);
 
     if ($documentType === 'notice_period') {
-        $wordFile = generateNoticePeriodDocument(
+        $wordFile = generateWordDocument(
             $templatePath,
             $user,
+            null,
+            null,
+            null,
+            null,
+            $_POST['addressTo'] ?? null,
+            null,
+            null,
+            null,
+            null,
+            null,
             $_POST['resignationDate'] ?? null,
             $_POST['noticePeriodStartDate'] ?? null,
             $_POST['lastWorkingDay'] ?? null,
-            $_POST['addressTo'] ?? null,
-            $_POST['country'] ?? 'UAE'
         );
     } else {
         $wordFile = generateWordDocument(
@@ -77,7 +61,12 @@ $templatePath = __DIR__ . "/templates/" .
             $_POST['addressTo'] ?? null,
             $_POST['addressToNoc'] ?? null,
             $_POST['nocReason'] ?? null,
-            $_POST['country'] ?? 'UAE'
+            $_POST['country'] ?? 'UAE',
+            null,
+            null,
+            null,
+            null,
+            null,
         );
     }
 

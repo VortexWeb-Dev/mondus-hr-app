@@ -20,7 +20,7 @@ function formatDateRange($startDate, $endDate)
     );
 }
 
-function generateWordDocument($templatePath, $user, $startDate, $endDate, $salaryNoc, $salary, $address_to, $address_to_noc, $noc_reason, $country)
+function generateWordDocument($templatePath, $user, $startDate, $endDate, $salaryNoc, $salary, $address_to, $address_to_noc, $noc_reason, $country, $resignationDate, $noticePeriodStartDate, $lastWorkingDay)
 {
     if (!file_exists($templatePath)) {
         error_log("Template file does not exist: $templatePath");
@@ -44,7 +44,10 @@ function generateWordDocument($templatePath, $user, $startDate, $endDate, $salar
         'NOC_SENTENCE' => generateNocSentence($noc_reason, $country, formatDateRange($startDate, $endDate)),
         'NOC_REASON' => generateNocReasonText($noc_reason, $country),
         'REF_NO' => generateReferenceNumber(),
-        'SALARY_TEXT' => convertSalaryToText((int)$salary)
+        'SALARY_TEXT' => convertSalaryToText((int)$salary),
+        'RESIGNATION_DATE' => (new DateTime($resignationDate))->format('jS F Y') ?? "",
+        'NOTICE_PERIOD_START_DATE' => (new DateTime($noticePeriodStartDate))->format('jS F Y') ?? "",
+        'LAST_WORKING_DAY' => (new DateTime($lastWorkingDay))->format('jS F Y') ?? "",
     ];
 
     foreach ($templateData as $placeholder => $value) {

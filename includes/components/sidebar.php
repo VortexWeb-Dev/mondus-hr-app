@@ -15,11 +15,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
                'dashboard.php' => ['Dashboard', 'fas fa-tachometer-alt'],
                'employees.php' => ['Employees', 'fas fa-users'],
                'attendance.php' => ['Attendance', 'fas fa-user-check'],
-               //'leaves.php' => ['Leaves', 'fas fa-calendar-alt'],
                'notice_period.php' => ['Notice Period', 'fas fa-hourglass-half'],
-               'reports.php' => ['Reports', 'fas fa-chart-line'],
                'salary_cert.php' => ['Salary Certificate', 'fas fa-money-check-alt'],
                'noc_cert.php' => ['NOC Certificate', 'fas fa-file-alt'],
+               'reports.php' => ['Reports', 'fas fa-chart-line'],
+               //'leaves.php' => ['Leaves', 'fas fa-calendar-alt'],
                // 'leave_balance.php' => ['Leave Balance', 'fas fa-calendar-check'],
            ];           
 
