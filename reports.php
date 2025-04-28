@@ -2,14 +2,18 @@
 include('includes/header.php');
 include('includes/components/sidebar.php');
 
-// Sample employee list (Replace with database or API)
-$employees = [
-    ['id' => 1, 'name' => 'John Doe'],
-    ['id' => 2, 'name' => 'Jane Smith'],
-    ['id' => 3, 'name' => 'Alex Johnson'],
-];
+// Load Bitrix users from API
+require_once __DIR__ . '/crest/crest.php';
+$employeeResponse = CRest::call('user.get', ['filter' => ['ACTIVE' => true]]);
 
-// Sample work logs (Replace with database or API)
+$employees = [];
+if (!empty($employeeResponse['result'])) {
+    foreach ($employeeResponse['result'] as $user) {
+        $employees[] = ['id' => $user['ID'], 'name' => trim($user['NAME'] . ' ' . $user['LAST_NAME'])];
+    }
+}
+
+// Sample work logs (static demo)
 $workLogs = [
     ['employee_id' => 1, 'date' => '2025-04-28', 'hours' => 8],
     ['employee_id' => 2, 'date' => '2025-04-28', 'hours' => 7],
@@ -19,7 +23,7 @@ $workLogs = [
     ['employee_id' => 1, 'date' => '2025-04-26', 'hours' => 5],
 ];
 
-// Handle filters
+// Filters
 $filterDate = $_GET['filterDate'] ?? '';
 $filterEmployee = $_GET['employee_id'] ?? '';
 
@@ -34,33 +38,28 @@ $filteredLogs = array_filter($workLogs, function($log) use ($filterDate, $filter
     return $match;
 });
 
-// Helper function to calculate totals
-function calculateTotalHours($logs, $period = 'day') {
-    $today = date('Y-m-d');
-    $currentWeek = date('W');
-    $currentMonth = date('m');
+// Prepare data for Chart.js
+$labels = array_unique(array_column($filteredLogs, 'date'));
+sort($labels);
 
-    $total = 0;
-    foreach ($logs as $log) {
-        $logDate = $log['date'];
-        $logHours = $log['hours'];
-
-        if ($period == 'day' && $logDate == $today) {
-            $total += $logHours;
+$employeeHours = [];
+foreach ($employees as $emp) {
+    $empData = [];
+    foreach ($labels as $date) {
+        $hours = 0;
+        foreach ($filteredLogs as $log) {
+            if ($log['employee_id'] == $emp['id'] && $log['date'] == $date) {
+                $hours = $log['hours'];
+            }
         }
-        if ($period == 'week' && date('W', strtotime($logDate)) == $currentWeek) {
-            $total += $logHours;
-        }
-        if ($period == 'month' && date('m', strtotime($logDate)) == $currentMonth) {
-            $total += $logHours;
-        }
+        $empData[] = $hours;
     }
-    return $total;
+    $employeeHours[] = [
+        'label' => $emp['name'],
+        'data' => $empData,
+        'backgroundColor' => sprintf('rgba(%d, %d, %d, 0.6)', rand(0, 255), rand(0, 255), rand(0, 255)),
+    ];
 }
-
-$todayHours = calculateTotalHours($filteredLogs, 'day');
-$weekHours = calculateTotalHours($filteredLogs, 'week');
-$monthHours = calculateTotalHours($filteredLogs, 'month');
 ?>
 
 <!DOCTYPE html>
@@ -70,31 +69,14 @@ $monthHours = calculateTotalHours($filteredLogs, 'month');
     <title>Working Hours Report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
 
 <div class="max-w-7xl mx-auto bg-white p-8 rounded-lg shadow-lg space-y-8">
     <h1 class="text-3xl font-bold text-center text-gray-800">Working Hours Report</h1>
 
-    <!-- Summary Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-        <div class="bg-white border-t-4 border-blue-500 p-6 rounded-lg shadow space-y-2">
-            <h3 class="text-xl font-semibold text-gray-700">Today</h3>
-            <p class="text-2xl font-bold text-blue-600"><?= $todayHours ?> hrs</p>
-        </div>
-
-        <div class="bg-white border-t-4 border-green-500 p-6 rounded-lg shadow space-y-2">
-            <h3 class="text-xl font-semibold text-gray-700">This Week</h3>
-            <p class="text-2xl font-bold text-green-600"><?= $weekHours ?> hrs</p>
-        </div>
-
-        <div class="bg-white border-t-4 border-yellow-500 p-6 rounded-lg shadow space-y-2">
-            <h3 class="text-xl font-semibold text-gray-700">This Month</h3>
-            <p class="text-2xl font-bold text-yellow-600"><?= $monthHours ?> hrs</p>
-        </div>
-    </div>
-
-    <!-- Filters Form -->
+    <!-- Filters -->
     <form method="GET" class="flex flex-col md:flex-row justify-center items-center space-x-4 mt-10 space-y-4 md:space-y-0">
         <div>
             <label for="filterDate" class="text-lg font-medium text-gray-700 block mb-2">Select Date:</label>
@@ -118,8 +100,10 @@ $monthHours = calculateTotalHours($filteredLogs, 'month');
         </div>
     </form>
 
-    <!-- Working Hours Table -->
-    <div class="overflow-x-auto mt-10">
+
+    <!-- Table -->
+    <div class="overflow-x-auto mt-12">
+        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Detailed Table</h2>
         <table class="min-w-full bg-white rounded-lg shadow">
             <thead class="bg-gray-200 text-gray-700">
                 <tr>
@@ -151,8 +135,42 @@ $monthHours = calculateTotalHours($filteredLogs, 'month');
             </tbody>
         </table>
     </div>
-
 </div>
+
+<script>
+    const ctx = document.getElementById('hoursChart').getContext('2d');
+    const hoursChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($labels) ?>,
+            datasets: <?= json_encode($employeeHours) ?>
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Hours Worked'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Employee Working Hours'
+                }
+            }
+        }
+    });
+</script>
 
 </body>
 </html>
