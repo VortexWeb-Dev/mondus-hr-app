@@ -11,11 +11,20 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </h1>
         <ul class="flex flex-col gap-2">
             <?php
-            $links = [
-                'salary_cert.php' => ['Salary Certificate', 'fas fa-money-check-alt'],
-                'noc_cert.php' => ['NOC Certificate', 'fas fa-file-alt'],
-                // 'leave_balance.php' => ['Leave Balance', 'fas fa-calendar-check'],
-            ];
+           $links = [
+               'dashboard.php' => ['Dashboard', 'fas fa-tachometer-alt'],
+               'employees.php' => ['Employees', 'fas fa-users'],
+               'attendance.php' => ['Attendance', 'fas fa-user-check'],
+               'leaves.php' => ['Leaves', 'fas fa-calendar-alt'],
+               'documents.php' => ['Documents', 'fas fa-file'],
+               'requests.php' => ['Requests', 'fas fa-paper-plane'],
+               'notice_period.php' => ['Notice Period', 'fas fa-hourglass-half'],
+               'reports.php' => ['Reports', 'fas fa-chart-line'],
+               'settings.php' => ['Settings', 'fas fa-cog'],
+               'salary_cert.php' => ['Salary Certificate', 'fas fa-money-check-alt'],
+               'noc_cert.php' => ['NOC Certificate', 'fas fa-file-alt'],
+               // 'leave_balance.php' => ['Leave Balance', 'fas fa-calendar-check'],
+           ];           
 
             foreach ($links as $link => $data) {
                 list($label, $icon) = $data;
@@ -38,6 +47,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <i class="fas fa-calendar-check mr-2"></i> Leave Application
                 </a>
             </li>
+            
         </ul>
     </div>
     <div class="p-6 text-sm text-gray-400 text-center">
