@@ -29,12 +29,16 @@ function generateWordDocument($templatePath, $data)
         // Common data
         'CURRENT_DATE' => $data['dateOfIssue'] ?? getTodayDateFormatted(),
         'ADDRESS_TO' => htmlspecialchars($data['addressTo']) ?? "",
-        // Salary Certificate specific data
         'FULL_NAME' => htmlspecialchars($data['fullName']) ?? "",
+        // Salary Certificate specific data
         'DESIGNATION' => htmlspecialchars($data['designation']) ?? "",
         'DATE_OF_JOINING' => $data['dateOfJoining'] ?? "",
         'SALARY_CURRENCY' => $data['salaryCurrency'] ?? "AED",
         'CURRENT_SALARY' => $data['currentSalary'] ?? "",
+        // Notice Period specific data
+        'RESIGNATION_DATE' => $data['resignationDate'] ?? "",
+        'NOTICE_PERIOD_START_DATE' => $data['noticePeriodStartDate'] ?? "",
+        'LAST_WORKING_DAY' => $data['lastWorkingDay'] ?? "",
     ];
 
     foreach ($templateData as $placeholder => $value) {

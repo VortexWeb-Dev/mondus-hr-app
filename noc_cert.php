@@ -101,7 +101,7 @@ include('includes/components/sidebar.php');
 
                 <!-- Submit Button -->
                 <div class="md:col-span-2 flex justify-end">
-                    <button type="submit"
+                    <button type="button"
                         class="bg-blue-600 text-white py-2 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors">
                         Download
                     </button>

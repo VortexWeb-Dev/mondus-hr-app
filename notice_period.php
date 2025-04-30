@@ -14,7 +14,7 @@ require_once 'crest/crest.php';
             <div class="flex-1 p-6">
                 <h3 class="text-xl font-semibold text-gray-800 text-center mb-4">Notice Period Letter</h3>
                 <form action="download.php" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="hidden" name="documentType" value="notice_period">
+                    <input type="hidden" name="documentType" value="notice">
 
                     <!-- Employee Name Dropdown -->
                     <div>
@@ -33,18 +33,18 @@ require_once 'crest/crest.php';
                     </div>
 
                     <!-- Notice Period Duration -->
-                    <div>
+                    <!-- <div>
                         <label for="noticePeriodDuration" class="block text-gray-600 text-sm font-medium">Notice Period Duration:</label>
                         <input type="number" id="noticePeriodDuration" name="noticePeriodDuration" placeholder="Enter Notice Period Duration"
                             class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
-                    </div>
+                    </div> -->
 
                     <!-- Contact Details of Employee -->
-                    <div>
+                    <!-- <div>
                         <label for="contactDetails" class="block text-gray-600 text-sm font-medium">Contact Details of Employee:</label>
                         <input type="number" id="contactDetails" name="contactDetails" placeholder="Enter Contact Number"
                             class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
-                    </div>
+                    </div> -->
 
                     <!-- Last Working Day -->
                     <div>
@@ -118,8 +118,8 @@ require_once 'crest/crest.php';
         users.forEach(user => {
             // Add to full name dropdown
             const option = document.createElement("option");
-            option.value = user.ID;
-            option.textContent = `${user.NAME} ${user.LAST_NAME}`;
+            option.value = `${user.NAME} ${user.LAST_NAME}`.trim();
+            option.textContent = `${user.NAME} ${user.LAST_NAME}`.trim();
             option.dataset.position = user.WORK_POSITION || '';
             option.dataset.joining = user.DATE_REGISTER ? user.DATE_REGISTER.split("T")[0] : '';
             fullNameSelect.appendChild(option);
