@@ -20,41 +20,27 @@ function formatDateRange($startDate, $endDate)
     );
 }
 
-function generateWordDocument($templatePath, $user, $startDate, $endDate, $salaryNoc, $salary, $address_to, $address_to_noc, $noc_reason, $country, $resignationDate, $noticePeriodStartDate, $lastWorkingDay)
+function generateWordDocument($templatePath, $data)
 {
-    if (!file_exists($templatePath)) {
-        error_log("Template file does not exist: $templatePath");
-        return null;
-    }
-
     $templateProcessor = new TemplateProcessor($templatePath);
 
     // Prepare data for the template
     $templateData = [
-        'FULL_NAME' => trim($user['NAME'] . ' ' . $user['LAST_NAME'] ?? ""),
-        'NATIONALITY' => $user['PERSONAL_COUNTRY'] ?? "",
-        'PASSPORT_NUMBER' => $user['UF_USR_1743588068970'] ?? "",
-        'DATE_OF_JOINING' => (new DateTime($user['UF_EMPLOYMENT_DATE']))->format('F Y'),
-        'POSITION' => $user['WORK_POSITION'] ?? "",
-        'SALARY' => number_format((int)$salary) ?? "",
-        'SALARY_NOC' => $salaryNoc ?? "",
-        'ADDRESS_TO' => $address_to ?? "",
-        'ADDRESS_TO_NOC' => $address_to_noc ?? "",
-        'CURRENT_DATE' => getTodayDateFormatted(),
-        'NOC_SENTENCE' => generateNocSentence($noc_reason, $country, formatDateRange($startDate, $endDate)),
-        'NOC_REASON' => generateNocReasonText($noc_reason, $country),
-        'REF_NO' => generateReferenceNumber(),
-        'SALARY_TEXT' => convertSalaryToText((int)$salary),
-        'RESIGNATION_DATE' => (new DateTime($resignationDate))->format('jS F Y') ?? "",
-        'NOTICE_PERIOD_START_DATE' => (new DateTime($noticePeriodStartDate))->format('jS F Y') ?? "",
-        'LAST_WORKING_DAY' => (new DateTime($lastWorkingDay))->format('jS F Y') ?? "",
+        // Common data
+        'CURRENT_DATE' => $data['dateOfIssue'] ?? getTodayDateFormatted(),
+        'ADDRESS_TO' => htmlspecialchars($data['addressTo']) ?? "",
+        // Salary Certificate specific data
+        'FULL_NAME' => htmlspecialchars($data['fullName']) ?? "",
+        'DESIGNATION' => htmlspecialchars($data['designation']) ?? "",
+        'DATE_OF_JOINING' => $data['dateOfJoining'] ?? "",
+        'SALARY_CURRENCY' => $data['salaryCurrency'] ?? "AED",
+        'CURRENT_SALARY' => $data['currentSalary'] ?? "",
     ];
 
     foreach ($templateData as $placeholder => $value) {
         $templateProcessor->setValue($placeholder, $value);
     }
 
-    // Save the document to a temporary file
     $tempFile = tempnam(sys_get_temp_dir(), 'docx');
     $templateProcessor->saveAs($tempFile);
 

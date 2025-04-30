@@ -5,70 +5,31 @@ require_once __DIR__ . "/crest/crestcurrent.php";
 
 if (isset($_POST['documentType'])) {
 
-    $documentType = $_POST['documentType'];
-$templatePath = __DIR__ . "/templates/" . 
-    ($documentType === 'salary_certificate' ? 'Salary.docx' :
-    ($documentType === 'noc' ? 'NOC.docx' :
-    ($documentType === 'notice_period' ? 'NoticePeriod.docx' : '')));
+    $documentType = $_POST['documentType']; // salary, noc, notice
+    $template = $_POST['templateType']; // mondus_properties, mondus_events, mondus_marketing, mondus_cft
+    $templatePath = __DIR__ . "/templates/$documentType/$template.docx";
 
     if (empty($templatePath) || !file_exists($templatePath)) {
-        echo "Invalid document type.";
+        echo "Invalid document type or template type.";
         exit;
     }
 
-    $currentUser = CRestCurrent::call('user.current');
-    $userId = $currentUser['result']['ID'];
+    $data = $_POST;
 
-    $user = getUserInfo($userId);
-    if (!$user) {
-        echo "User information could not be retrieved.";
-        exit;
-    }
-    
-    $fullName = trim(ucwords(strtolower(trim($user['NAME']))) . ' ' .
-        ucwords(strtolower(trim($user['SECOND_NAME'] ?? ''))) . ' ' .
-        ucwords(strtolower(trim($user['LAST_NAME']))));
-    $fullName = preg_replace('/\s+/', ' ', $fullName);
-    
+    $fullName = $_POST['fullName'] ?? '';
+    $designation = $_POST['designation'] ?? '';
+    $dateOfJoining = $_POST['joiningDate'] ?? '';
+    $dateOfIssue = $_POST['dateOfIssue'] ?? '';
+    $currentSalary = $_POST['currentSalary'] ?? '';
+    $salaryCurrency = $_POST['salaryCurrency'] ?? 'AED';
+    $addressTo = $_POST['addressTo'] ?? '';
+
     $sanitizedFileName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $fullName);
 
-    if ($documentType === 'notice_period') {
-        $wordFile = generateWordDocument(
-            $templatePath,
-            $user,
-            null,
-            null,
-            null,
-            null,
-            $_POST['addressTo'] ?? null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $_POST['resignationDate'] ?? null,
-            $_POST['noticePeriodStartDate'] ?? null,
-            $_POST['lastWorkingDay'] ?? null,
-        );
-    } else {
-        $wordFile = generateWordDocument(
-            $templatePath,
-            $user,
-            $_POST['startDate'] ?? null,
-            $_POST['endDate'] ?? null,
-            $_POST['currentSalaryNoc'] ?? null,
-            $_POST['currentSalary'] ?? null,
-            $_POST['addressTo'] ?? null,
-            $_POST['addressToNoc'] ?? null,
-            $_POST['nocReason'] ?? null,
-            $_POST['country'] ?? 'UAE',
-            null,
-            null,
-            null,
-            null,
-            null,
-        );
-    }
+    $wordFile = generateWordDocument(
+        $templatePath,
+        $data
+    );
 
     if ($wordFile) {
         header('Content-Description: File Transfer');

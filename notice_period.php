@@ -82,7 +82,7 @@ require_once 'crest/crest.php';
                             <option value="mondus_properties">Mondus Properties</option>
                             <option value="mondus_events">Mondus Events</option>
                             <option value="mondus_marketing">Mondus Marketing</option>
-                            <option value="close_friends_traders">Close Friends Traders</option>
+                            <option value="mondus_cft">Close Friends Traders</option>
                         </select>
                     </div>
 
