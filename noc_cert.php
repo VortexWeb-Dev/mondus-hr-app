@@ -14,16 +14,16 @@ include('includes/components/sidebar.php');
                 <input type="hidden" name="documentType" value="noc">
 
                 <div>
-                    <label for="employeeName" class="block text-gray-600 text-sm font-medium">Employee Full Name:</label>
-                    <select id="employeeName" name="employeeName" class="w-full px-4 py-2 mt-1 border rounded-lg">
-                        <option value="">Select Employee</option>
+                    <label for="fullName" class="block text-gray-600 text-sm font-medium">Employee Full Name:</label>
+                    <select id="fullName" name="fullName" class="w-full px-4 py-2 mt-1 border rounded-lg">
+
                     </select>
                 </div>
 
                 <div>
-                    <label for="jobTitle" class="block text-gray-600 text-sm font-medium">Position / Job Title:</label>
-                    <select id="jobTitle" name="jobTitle" class="w-full px-4 py-2 mt-1 border rounded-lg">
-                        <option value="">Select Job Title</option>
+                    <label for="designation" class="block text-gray-600 text-sm font-medium">Position / Job Title:</label>
+                    <select id="designation" name="designation" class="w-full px-4 py-2 mt-1 border rounded-lg">
+
                     </select>
                 </div>
 
@@ -37,15 +37,15 @@ include('includes/components/sidebar.php');
 
                 <!-- Letter Date -->
                 <div>
-                    <label for="letterDate" class="block text-gray-600 text-sm font-medium">Letter Date:</label>
-                    <input type="date" id="letterDate" name="letterDate" value="<?= date('Y-m-d') ?>" required
+                    <label for="dateOfIssue" class="block text-gray-600 text-sm font-medium">Letter Date:</label>
+                    <input type="date" id="dateOfIssue" name="dateOfIssue" value="<?= date('Y-m-d') ?>" required
                         class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
                 </div>
 
                 <!-- Current Salary -->
                 <div>
-                    <label for="currentSalaryNoc" class="block text-gray-600 text-sm font-medium">Current Salary (AED):</label>
-                    <input type="number" id="currentSalaryNoc" name="currentSalaryNoc" placeholder="Enter your current salary"
+                    <label for="currentSalary" class="block text-gray-600 text-sm font-medium">Current Salary (AED):</label>
+                    <input type="number" id="currentSalary" name="currentSalary" placeholder="Enter your current salary"
                         class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" required>
                 </div>
 
@@ -58,16 +58,27 @@ include('includes/components/sidebar.php');
 
                 <!-- Address To -->
                 <div>
-                    <label for="addressToNoc" class="block text-gray-600 text-sm font-medium">Address To:</label>
-                    <input type="text" id="addressToNoc" name="addressToNoc" placeholder="Enter the recipient address"
+                    <label for="addressTo" class="block text-gray-600 text-sm font-medium">Address To:</label>
+                    <input type="text" id="addressTo" name="addressTo" placeholder="Enter the recipient address"
                         class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" required>
                 </div>
 
-                <!-- Country -->
-                <div>
+                <!-- Travel or Visa -->
+                <div id="countryContainer" class="hidden">
                     <label for="country" class="block text-gray-600 text-sm font-medium">Country of Visa / Use:</label>
                     <input type="text" id="country" name="country" placeholder="e.g. IND / India"
                         class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label for="templateType" class="block text-gray-600 text-sm font-medium">Select Template:</label>
+                    <select id="templateType" name="templateType" required
+                        class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
+                        <option value="mondus_properties">Mondus Properties</option>
+                        <option value="mondus_events">Mondus Events</option>
+                        <option value="mondus_marketing">Mondus Marketing</option>
+                        <option value="mondus_cft">Close Friends Traders</option>
+                    </select>
                 </div>
 
                 <!-- NOC Reason -->
@@ -76,13 +87,13 @@ include('includes/components/sidebar.php');
                     <select name="nocReason" id="nocReason" class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" required>
                         <option value="">Select Reason</option>
                         <option value="travel">Travel</option>
-                        <option value="visa_application">Visa Application</option>
-                        <option value="mortgage_application">Mortgage Application</option>
-                        <option value="credit_card_application">Credit Card Application</option>
-                        <option value="debit_card_application">Debit Card Application</option>
-                        <option value="bank_account_opening">Bank Account Opening</option>
-                        <option value="tenancy_rental">Tenancy / Rental</option>
-                        <option value="job_change_resignation">Job Change / Resignation</option>
+                        <option value="visa">Visa Application</option>
+                        <option value="mortgage">Mortgage Application</option>
+                        <option value="credit">Credit Card Application</option>
+                        <option value="debit">Debit Card Application</option>
+                        <option value="bank">Bank Account Opening</option>
+                        <option value="tenancy">Tenancy / Rental</option>
+                        <option value="resignation">Job Change / Resignation</option>
                     </select>
                 </div>
 
@@ -99,9 +110,30 @@ include('includes/components/sidebar.php');
                         class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
                 </div>
 
+                <!-- Debit Card or Credit Card or Bank Account -->
+                <div id="bankNameContainer" class="hidden">
+                    <label for="bankName" class="block text-gray-600 text-sm font-medium">Bank Name:</label>
+                    <input type="text" id="bankName" name="bankName" placeholder="Enter Bank Name"
+                        class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
+                </div>
+
+                <!-- Mortgage -->
+                <div id="institutionNameContainer" class="hidden">
+                    <label for="institutionName" class="block text-gray-600 text-sm font-medium">Institution Name:</label>
+                    <input type="text" id="institutionName" name="institutionName" placeholder="Enter Institution Name"
+                        class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
+                </div>
+
+                <!-- Tenancy -->
+                <div id="propertyAddressContainer" class="hidden">
+                    <label for="propertyAddress" class="block text-gray-600 text-sm font-medium">Property Address:</label>
+                    <input type="text" id="propertyAddress" name="propertyAddress" placeholder="Enter Property Address"
+                        class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500">
+                </div>
+
                 <!-- Submit Button -->
                 <div class="md:col-span-2 flex justify-end">
-                    <button type="button"
+                    <button type="submit"
                         class="bg-blue-600 text-white py-2 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors">
                         Download
                     </button>
@@ -114,20 +146,39 @@ include('includes/components/sidebar.php');
         const nocReasonInput = document.getElementById('nocReason');
         const startDateContainer = document.getElementById('startDateContainer');
         const endDateContainer = document.getElementById('endDateContainer');
+        const bankNameContainer = document.getElementById('bankNameContainer');
+        const institutionNameContainer = document.getElementById('institutionNameContainer');
+        const propertyAddressContainer = document.getElementById('propertyAddressContainer');
+        const countryContainer = document.getElementById('countryContainer');
 
         nocReasonInput.addEventListener('change', function() {
+            // Always hide all containers first
+            startDateContainer.classList.add('hidden');
+            endDateContainer.classList.add('hidden');
+            bankNameContainer.classList.add('hidden');
+            institutionNameContainer.classList.add('hidden');
+            propertyAddressContainer.classList.add('hidden');
+            countryContainer.classList.add('hidden');
+
             const selectedReason = nocReasonInput.value;
+
             if (selectedReason === 'travel') {
                 startDateContainer.classList.remove('hidden');
                 endDateContainer.classList.remove('hidden');
-            } else {
-                startDateContainer.classList.add('hidden');
-                endDateContainer.classList.add('hidden');
+                countryContainer.classList.remove('hidden');
+            } else if (['credit', 'debit', 'bank'].includes(selectedReason)) {
+                bankNameContainer.classList.remove('hidden');
+            } else if (selectedReason === 'mortgage') {
+                institutionNameContainer.classList.remove('hidden');
+            } else if (selectedReason === 'tenancy') {
+                propertyAddressContainer.classList.remove('hidden');
+            } else if (selectedReason === 'visa') {
+                countryContainer.classList.remove('hidden');
             }
         });
 
-        const fullNameSelect = document.getElementById('employeeName');
-        const jobTitleSelect = document.getElementById('jobTitle');
+        const fullNameSelect = document.getElementById('fullName');
+        const designationSelect = document.getElementById('designation');
 
         async function fetchAllUsersBitrix(url) {
             let users = [];
@@ -172,7 +223,7 @@ include('includes/components/sidebar.php');
                     const option = document.createElement('option');
                     option.value = position;
                     option.textContent = position;
-                    jobTitleSelect.appendChild(option);
+                    designationSelect.appendChild(option);
                     positionsAdded.add(position);
                 }
             });

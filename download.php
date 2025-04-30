@@ -7,10 +7,19 @@ if (isset($_POST['documentType'])) {
 
     $documentType = $_POST['documentType']; // salary, noc, notice
     $template = $_POST['templateType']; // mondus_properties, mondus_events, mondus_marketing, mondus_cft
-    $templatePath = __DIR__ . "/templates/$documentType/$template.docx";
+    $nocReason = $_POST['nocReason']; // visa, travel, mortgage, credit, debit, bank, tenancy, resignation
+
+    $docSubPath = $documentType;
+    if (!empty($nocReason)) {
+        $docSubPath .= "/$nocReason";
+    }
+
+    $templatePath = __DIR__ . "/templates/$docSubPath/$template.docx";
 
     if (empty($templatePath) || !file_exists($templatePath)) {
         echo "Invalid document type or template type.";
+        echo "Template path: $templatePath";
+        echo "Template exists: " . file_exists($templatePath);
         exit;
     }
 
@@ -34,7 +43,7 @@ if (isset($_POST['documentType'])) {
     if ($wordFile) {
         header('Content-Description: File Transfer');
         header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        header('Content-Disposition: attachment; filename="' . basename($templatePath, '.docx') . '_' . $sanitizedFileName . '.docx"');
+        header('Content-Disposition: attachment; filename="' . basename($templatePath, '.docx') . '_' . $documentType . '_' . $sanitizedFileName . '.docx"');
         header('Content-Length: ' . filesize($wordFile));
         readfile($wordFile);
 

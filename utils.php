@@ -39,6 +39,14 @@ function generateWordDocument($templatePath, $data)
         'RESIGNATION_DATE' => $data['resignationDate'] ?? "",
         'NOTICE_PERIOD_START_DATE' => $data['noticePeriodStartDate'] ?? "",
         'LAST_WORKING_DAY' => $data['lastWorkingDay'] ?? "",
+        // NOC specific data
+        'BANK_NAME' => $data['bankName'] ?? "",
+        'START_DATE' => $data['travelStartDate'] ?? "",
+        'END_DATE' => $data['travelEndDate'] ?? "",
+        'DESTINATION_COUNTRY' => $data['country'] ?? "",
+        'COUNTRY' => $data['country'] ?? "",
+        'PROPERTY_ADDRESS' => $data['propertyAddress'] ?? "",
+        'INSTITUTION_NAME' => $data['institutionName'] ?? "",
     ];
 
     foreach ($templateData as $placeholder => $value) {
