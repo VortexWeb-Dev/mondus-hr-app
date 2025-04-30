@@ -6,7 +6,9 @@ include('includes/components/sidebar.php');
 require_once 'crest/crest.php'; // Assuming you have this file set up correctly
 
 // Fetch user list
-$response = CRest::call('user.get');
+$response = CRest::call('user.get', [
+    'select' => ['ID', 'NAME', 'LAST_NAME', 'EMAIL', 'WORK_POSITION', 'PERSONAL_PHONE', 'PERSONAL_MOBILE', 'WORK_PHONE'],
+]);
 
 // Check if response is valid
 $employees = [];
@@ -29,11 +31,13 @@ $paginated_employees = array_slice($employees, $start_index, $employees_per_page
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Employees</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100 p-8">
 
     <div class="max-w-7xl mx-auto">
@@ -59,8 +63,8 @@ $paginated_employees = array_slice($employees, $start_index, $employees_per_page
                                     <td class="py-3 px-6"><?php echo htmlspecialchars(trim($employee['NAME'] . ' ' . $employee['LAST_NAME'])); ?></td>
                                     <td class="py-3 px-6"><?php echo htmlspecialchars($employee['EMAIL']); ?></td>
                                     <td class="py-3 px-6"><?php echo htmlspecialchars($employee['WORK_POSITION']); ?></td>
-                                    <?php echo htmlspecialchars($employee['WORK_PHONE'] ?? $employee['PERSONAL_MOBILE'] ?? ''); ?>
-                                    </tr>
+                                    <td class="py-3 px-6"><?php echo htmlspecialchars($employee['PERSONAL_PHONE'] ?? $employee['PERSONAL_MOBILE'] ?? $employee['WORK_PHONE']); ?></td>
+                                </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
@@ -88,4 +92,5 @@ $paginated_employees = array_slice($employees, $start_index, $employees_per_page
     </div>
 
 </body>
+
 </html>
