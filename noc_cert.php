@@ -49,20 +49,6 @@ include('includes/components/sidebar.php');
                         class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" required>
                 </div>
 
-                <!-- Contact Number -->
-                <div>
-                    <label for="contactNumber" class="block text-gray-600 text-sm font-medium">Contact Number:</label>
-                    <input type="tel" id="contactNumber" name="contactNumber" placeholder="Enter contact number"
-                        class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" required>
-                </div>
-
-                <!-- Address To -->
-                <div>
-                    <label for="addressTo" class="block text-gray-600 text-sm font-medium">Address To:</label>
-                    <input type="text" id="addressTo" name="addressTo" placeholder="Enter the recipient address"
-                        class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring focus:ring-blue-500" required>
-                </div>
-
                 <!-- Travel or Visa -->
                 <div id="countryContainer" class="hidden">
                     <label for="country" class="block text-gray-600 text-sm font-medium">Country of Visa / Use:</label>
