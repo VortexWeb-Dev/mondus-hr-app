@@ -37,6 +37,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
             }
             ?>
             <li>
+                <a href="https://apps.mondus.group/leave-management/" target="_blank" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-clipboard-list mr-2"></i> Leave Management
+                </a>
+            </li>
+            <li>
                 <a href="https://mondus.group/bizproc/processes/12/view/0/" target="_blank" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
                     <i class="fas fa-calendar-check mr-2"></i> Leave Application
                 </a>
